@@ -10,24 +10,8 @@ const DATE_RE = /^(\d{1,})-(\d{2})-(\d{2})$/;
 const TIMEZONE_RE = /([Z+-])(\d{2})?:?(\d{2})?:?(\d{2})?/;
 const BC_RE = /BC$/;
 
-function decodeDate(dateStr: string): null | Date {
-  const matches = DATE_RE.exec(dateStr);
-
-  if (!matches) {
-    return null;
-  }
-
-  const year = parseInt(matches[1], 10);
-  // remember JS dates are 0-based
-  const month = parseInt(matches[2], 10) - 1;
-  const day = parseInt(matches[3], 10);
-  const date = new Date(year, month, day);
-  // use `setUTCFullYear` because if date is from first
-  // century `Date`'s compatibility for millenium bug
-  // would set it as 19XX
-  date.setUTCFullYear(year);
-
-  return date;
+function decodeDate(dateStr: string): Date {
+  return new Date(dateStr + 'T00:00:00Z');
 }
 /**
  * Decode numerical timezone offset from provided date string.
